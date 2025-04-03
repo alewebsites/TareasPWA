@@ -1,0 +1,16 @@
+{
+    "name": "Lista de Clientes",
+    "short_name": "Clientes",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "description": "XGigabyte Lista de Clientes",
+    "icons": [
+      {
+        "src": "icon.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ]
+}
