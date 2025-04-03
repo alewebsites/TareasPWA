@@ -221,11 +221,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     resetAllBtn.addEventListener("click", async () => {
-        if (confirm("¿Estás seguro que deseas resetear todos los estados?")) {
+        if (confirm("¿Estás seguro que deseas resetear todas las tareas?")) {
             const querySnapshot = await getDocs(collection(db, "tasks"));
             querySnapshot.forEach(async (docData) => {
                 await updateDoc(doc(db, "tasks", docData.id), { status: "red" });  // CORREGIDO
             });
-        }
-   });
+        }
+   });
 });
