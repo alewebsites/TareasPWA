@@ -64,6 +64,10 @@
 //     renderTasks();
 // });
 
+
+
+
+
 // document.addEventListener("DOMContentLoaded", () => {
 //     const taskTable = document.querySelector("#taskTable tbody");
 //     const addTaskBtn = document.getElementById("addTask");
@@ -139,18 +143,18 @@
 
 // Importar Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Configuración de Firebase (REEMPLAZA CON TUS DATOS)
 const firebaseConfig = {
     apiKey: "AIzaSyCQ8lVwdkCiWg0bmLZFZ1ezGl-rUvRLJeg",
     authDomain: "tareaspwa-66987.firebaseapp.com",
     projectId: "tareaspwa-66987",
-    storageBucket: "tareaspwa-66987.firebasestorage.app",
+    storageBucket: "tareaspwa-66987.appspot.com",  // CORREGIDO
     messagingSenderId: "103138070679",
     appId: "1:103138070679:web:6734ea6200767a02f199d2",
     measurementId: "G-D3SQNVX3LM"
-  };
+};
 
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
@@ -177,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
             row.innerHTML = `
                 <td>${task.name}</td>
                 <td>
-                    <button class="status-btn" data-index="${index}" style="background-color: ${task.status}; padding: 12px; border-radius:12px; border: 2px solid #ddd;"></button>
+                    <button class="status-btn" data-id="${task.id}" style="background-color: ${task.status}; padding: 12px; border-radius:12px; border: 2px solid #ddd;"></button>
                 </td>
                 <td>
                     <button class="reset-btn" data-id="${task.id}">Reset</button>
@@ -189,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     addTaskBtn.addEventListener("click", async () => {
-        const taskName = prompt("Ingrese el nombre de la tarea:");
+        const taskName = prompt("Ingrese el nombre del cliente:");
         if (taskName) {
             await addDoc(collection(db, "tasks"), { name: taskName, status: "red" });
         }
@@ -200,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const taskRef = doc(db, "tasks", taskId);
 
         if (e.target.classList.contains("status-btn")) {
-            const taskSnapshot = await taskRef.get();
+            const taskSnapshot = await getDoc(taskRef);  // CORREGIDO
             if (taskSnapshot.exists()) {
                 let task = taskSnapshot.data();
                 if (task.status !== "green") { // Si no está en verde, permite cambiar
@@ -217,10 +221,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     resetAllBtn.addEventListener("click", async () => {
-        if (confirm("¿Estás seguro que deseas resetear todas las tareas?")) {
+        if (confirm("¿Estás seguro que deseas resetear todos los estados?")) {
             const querySnapshot = await getDocs(collection(db, "tasks"));
-            querySnapshot.forEach(async (doc) => {
-                await updateDoc(doc.ref, { status: "red" });
+            querySnapshot.forEach(async (docData) => {
+                await updateDoc(doc(db, "tasks", docData.id), { status: "red" });  // CORREGIDO
             });
         }
    });
